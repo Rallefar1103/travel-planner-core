@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require("./database"); // Initialize database
+require("dotenv").config();
 
 app.use(express.json()); // Middleware for JSON parsing
 
