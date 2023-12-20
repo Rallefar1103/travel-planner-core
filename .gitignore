@@ -1,0 +1,14 @@
+# Node modules folder
+node_modules/
+
+# Build output
+/dist
+/build
+
+# Env files
+.env
+
+# Other common ignores
+*.log
+*.tmp
+*.temp
