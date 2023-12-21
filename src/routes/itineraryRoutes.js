@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const axios = require("axios");
 const Itinerary = require("../models/itinerary");
 
 const recommenderURL = process.env.RECOMMENDER_URL;
