@@ -22,6 +22,10 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, async () => {
   console.log(`Core service running on http://localhost:${PORT}`);
   console.log("Calling the mock yelp api call now");
+  await mockIntegration();
+});
+
+async function mockIntegration() {
   const mockItineraryData = {
     title: "Copenhagen Itinerary 2024",
 
@@ -50,4 +54,4 @@ app.listen(PORT, async () => {
     "ChatGPT itinerary suggestion",
     finalResponse.itinerary.recommendedItinerary
   );
-});
+}
