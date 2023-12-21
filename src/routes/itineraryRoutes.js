@@ -6,8 +6,8 @@ const recommenderURL = process.env.RECOMMENDER_URL;
 
 router.post("/itineraries", async (req, res) => {
   try {
-    const { id, title, description } = req.body;
-    const newItinerary = new Itinerary({ id, title, description });
+    const { title, description } = req.body;
+    const newItinerary = new Itinerary({ title, description });
     const savedItinerary = await newItinerary.save(); // save to mongoDB
 
     // Prepare data for the recommender-service
@@ -26,10 +26,14 @@ router.post("/itineraries", async (req, res) => {
 
       savedItinerary.recommendations = recommenderResponse.data;
 
-      // Create the final response with recommended data.
+      // Create the final response with recommended data added
       const finalResponse = {
-        itinerary: savedItinerary,
-        recommendations: savedItinerary.recommendationData,
+        itinerary: {
+          id: savedItinerary._id,
+          title: savedItinerary.title,
+          description: savedItinerary.description,
+          recommendations: savedItinerary.recommendations,
+        },
       };
 
       // Send the recommended itinerary back to graphql-server
