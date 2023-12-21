@@ -25,7 +25,7 @@ router.post("/itineraries", async (req, res) => {
     // Get personalized and better results from Yelp
     const yelpData = prepareYelpData(itineraryToMake);
 
-    // Call the External-API service
+    // // Call the External-API service
     const yelpResults = await axios.post(
       env.process.EXTERNAL_APIS_URL_YELP,
       yelpData
