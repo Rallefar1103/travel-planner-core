@@ -7,7 +7,7 @@ app.use(express.json()); // Middleware for JSON parsing
 
 // Itinerary routes
 const itineraryRoutes = require("./routes/itineraryRoutes");
-app.use("/itineraries", itineraryRoutes);
+app.use("/api", itineraryRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {
