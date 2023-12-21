@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Itinerary = require("../models/itinerary");
 
+const recommenderURL = process.env.RECOMMENDER_URL;
+
 router.post("/itineraries", async (req, res) => {
   try {
     const { id, title, description } = req.body;
@@ -18,7 +20,7 @@ router.post("/itineraries", async (req, res) => {
     // Forward data to the ChatGPT recommender-service
     try {
       const recommenderResponse = await axios.post(
-        "http://recommender-service/api/recommend",
+        `${recommenderURL}/recommend`,
         recommendationData
       );
 
