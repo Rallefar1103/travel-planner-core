@@ -4,13 +4,16 @@ const axios = require("axios");
 const {
   processYelpData,
   prepareYelpData,
-} = require("./helpers/yelpDataHelper");
+} = require("../helpers/yelpDataHelper");
 
 async function mockYelpApiCall() {
   const mockItineraryData = {
     title: "Copenhagen Itinerary 2024",
-    description:
-      "An itinerary that lasts 14 days in Copenhagen, with a budget of $2,000",
+
+    destination: "Copenhagen",
+    duration: "14",
+    budget: "2000",
+
     userPreferences: {
       destination: "Copenhagen",
       diningOptions: {
@@ -37,13 +40,18 @@ async function mockYelpApiCall() {
     console.log("Data fetched from Yelp", yelpResults);
 
     // Process fetched Yelp Data
-    const listOfBusinesses = processYelpData(yelpResults.data);
+    const listOfBusinesses = processYelpData(
+      yelpResults.data,
+      mockItineraryData.duration
+    );
 
     console.log("Yelp data processed", listOfBusinesses);
 
     const recommendationData = {
       title: mockItineraryData.title,
-      description: mockItineraryData.description,
+      destination: mockItineraryData.destination,
+      duration: mockItineraryData.duration,
+      budget: mockItineraryData.budget,
       restaurants: listOfBusinesses,
     };
 
@@ -52,3 +60,5 @@ async function mockYelpApiCall() {
     console.error("Error during Yelp API call:", error);
   }
 }
+
+module.exports = mockYelpApiCall;
