@@ -6,25 +6,7 @@ const {
   prepareYelpData,
 } = require("../helpers/yelpDataHelper");
 
-async function mockYelpApiCall() {
-  const mockItineraryData = {
-    title: "Copenhagen Itinerary 2024",
-
-    destination: "Copenhagen",
-    duration: "14",
-    budget: "2000",
-
-    userPreferences: {
-      destination: "Copenhagen",
-      diningOptions: {
-        type: "restaurants",
-        cuisine: "italian",
-        priceRange: "3",
-      },
-    },
-    recommendations: "",
-  };
-
+async function mockYelpApiCall(mockItineraryData) {
   // Get personalized and better results from Yelp
   const yelpData = prepareYelpData(mockItineraryData.userPreferences);
 
@@ -55,7 +37,7 @@ async function mockYelpApiCall() {
       restaurants: listOfBusinesses,
     };
 
-    console.log("Recommendation data for GPT", recommendationData);
+    return recommendationData;
   } catch (error) {
     console.error("Error during Yelp API call:", error);
   }
