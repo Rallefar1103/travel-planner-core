@@ -8,7 +8,7 @@ const {
 
 async function mockYelpApiCall(mockItineraryData) {
   // Get personalized and better results from Yelp
-  const yelpData = prepareYelpData(mockItineraryData.userPreferences);
+  const yelpData = prepareYelpData(mockItineraryData);
 
   console.log("Prepared Yelp Data", yelpData);
 
@@ -34,6 +34,7 @@ async function mockYelpApiCall(mockItineraryData) {
       destination: mockItineraryData.destination,
       duration: mockItineraryData.duration,
       budget: mockItineraryData.budget,
+      attractions: ["art", "sightseeing"],
       restaurants: listOfBusinesses,
     };
 

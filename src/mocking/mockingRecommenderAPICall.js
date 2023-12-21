@@ -25,7 +25,7 @@ async function mockGPTCall(recommendationData, itineraryToMake) {
         destination: itineraryToMake.destination,
         duration: itineraryToMake.duration,
         budget: itineraryToMake.budget,
-        recommendations: recommenderResponse.data,
+        recommendedItinerary: recommenderResponse.data,
       },
     };
 

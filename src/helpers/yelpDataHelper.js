@@ -1,9 +1,9 @@
-function prepareYelpData(userPreferences) {
+function prepareYelpData(itinerayData) {
   return {
-    location: userPreferences.destination,
-    term: userPreferences.diningOptions.type, // e.g., 'restaurant', 'bar'
-    categories: userPreferences.diningOptions.cuisine, // e.g., 'italian', 'japanese'
-    price: userPreferences.diningOptions.priceRange, // e.g., '1', '2', '3', '4'
+    location: itinerayData.destination,
+    term: itinerayData.userPreferences.diningOptions.type, // e.g., 'restaurant', 'bar'
+    categories: itinerayData.userPreferences.diningOptions.cuisine, // e.g., 'italian', 'japanese'
+    price: itinerayData.userPreferences.diningOptions.priceRange, // e.g., '1', '2', '3', '4'
   };
 }
 

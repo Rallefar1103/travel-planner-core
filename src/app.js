@@ -19,7 +19,7 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Core service running on http://localhost:${PORT}`);
   console.log("Calling the mock yelp api call now");
   const mockItineraryData = {
@@ -30,16 +30,24 @@ app.listen(PORT, () => {
     budget: "2000",
 
     userPreferences: {
-      destination: "Copenhagen",
       diningOptions: {
         type: "restaurants",
         cuisine: "italian",
         priceRange: "3",
       },
+      attractionOptions: {
+        type: ["art", "sightseeing"],
+      },
     },
-    recommendations: "",
+    recommendedItinerary: "",
   };
-  const recommendationData = mockYelpApiCall(mockItineraryData);
-  const itinerary = mockGPTCall(recommendationData, mockItineraryData);
-  console.log("ChatGPT itinerary suggestion", itinerary);
+  const recommendationData = await mockYelpApiCall(mockItineraryData);
+  const finalResponse = await mockGPTCall(
+    recommendationData,
+    mockItineraryData
+  );
+  console.log(
+    "ChatGPT itinerary suggestion",
+    finalResponse.itinerary.recommendedItinerary
+  );
 });
