@@ -11,16 +11,17 @@ const recommenderURL = process.env.RECOMMENDER_URL;
 
 router.post("/itineraries", async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, userPreferences } = req.body;
 
     const itineraryToMake = {
       title: title,
       description: description,
+      userPreferences: userPreferences,
       recommendations: "",
     };
 
     // Get personalized and better results from Yelp
-    const yelpData = prepareYelpData(userPreferences);
+    const yelpData = prepareYelpData(itineraryToMake.userPreferences);
 
     // Call the External-API service
     const yelpResults = await axios.post(
@@ -34,7 +35,7 @@ router.post("/itineraries", async (req, res) => {
     const recommendationData = {
       title: itineraryToMake.title,
       description: itineraryToMake.description,
-      yelpData: listOfBusinesses,
+      restaurants: listOfBusinesses,
     };
 
     // Forward data to the ChatGPT recommender-service

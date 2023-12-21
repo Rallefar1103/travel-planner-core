@@ -49,7 +49,7 @@ function prepareYelpData(userPreferences) {
 // },
 
 function processYelpData(yelpData) {
-  return yelpData.businesses.map((business) => ({
+  return yelpData.map((business) => ({
     name: business.name,
     rating: business.rating,
     price: business.price,
