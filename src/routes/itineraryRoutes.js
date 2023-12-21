@@ -11,17 +11,19 @@ const recommenderURL = process.env.RECOMMENDER_URL;
 
 router.post("/itineraries", async (req, res) => {
   try {
-    const { title, description, userPreferences } = req.body;
+    const { title, destination, duration, budget, userPreferences } = req.body;
 
     const itineraryToMake = {
       title: title,
-      description: description,
+      destination: destination,
+      duration: duration,
+      budget: budget,
       userPreferences: userPreferences,
-      recommendations: "",
+      recommendedItineraryDescription: "",
     };
 
     // Get personalized and better results from Yelp
-    const yelpData = prepareYelpData(itineraryToMake.userPreferences);
+    const yelpData = prepareYelpData(itineraryToMake);
 
     // Call the External-API service
     const yelpResults = await axios.post(
@@ -30,12 +32,18 @@ router.post("/itineraries", async (req, res) => {
     );
 
     // Process fetched Yelp Data
-    const listOfBusinesses = processYelpData(yelpResults.data);
+    const listOfRestaurants = processYelpData(
+      yelpResults.data,
+      itineraryToMake.duration
+    );
 
     const recommendationData = {
       title: itineraryToMake.title,
-      description: itineraryToMake.description,
-      restaurants: listOfBusinesses,
+      destination: itineraryToMake.destination,
+      duration: itineraryToMake.duration,
+      budget: itineraryToMake.budget,
+      attractions: itineraryToMake.userPreferences.attractions.type,
+      restaurants: listOfRestaurants,
     };
 
     // Forward data to the ChatGPT recommender-service
@@ -45,7 +53,8 @@ router.post("/itineraries", async (req, res) => {
         recommendationData
       );
 
-      itineraryToMake.recommendations = recommenderResponse.data;
+      itineraryToMake.recommendedItineraryDescription =
+        recommenderResponse.data;
 
       const newItinerary = new Itinerary(itineraryToMake);
       const savedItinerary = await newItinerary.save(); // save to mongoDB
@@ -54,9 +63,12 @@ router.post("/itineraries", async (req, res) => {
       const finalResponse = {
         itinerary: {
           id: savedItinerary._id,
-          title: savedItinerary.title,
-          description: savedItinerary.description,
-          recommendations: savedItinerary.recommendations,
+          destination: savedItinerary.destination,
+          duration: savedItinerary.duration,
+          budget: savedItinerary.budget,
+          userPreferences: savedItinerary.userPreferences,
+          recommendedItineraryDescription:
+            savedItinerary.recommendedItineraryDescription,
         },
       };
 

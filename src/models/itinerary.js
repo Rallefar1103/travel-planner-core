@@ -21,7 +21,7 @@ const itinerarySchema = new mongoose.Schema({
   duration: String,
   budget: String,
   userPreferences: userPreferencesSchema,
-  recommendedItinerary: String, // or another Schema if it's more complex
+  recommendedItineraryDescription: String,
 });
 
 module.exports = mongoose.model("Itinerary", itinerarySchema);
