@@ -6,4 +6,4 @@ const itinerarySchema = new mongoose.Schema({
   description: String,
 });
 
-module.exports = mongoose.model("Itinerary", attractionSchema);
+module.exports = mongoose.model("Itinerary", itinerarySchema);
