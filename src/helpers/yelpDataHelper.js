@@ -19,6 +19,11 @@ function processYelpData(yelpData, duration) {
   }));
 
   restaurants.sort((a, b) => b.rating - a.rating);
+
+  if (duration >= 7) {
+    return restaurants.slice(0, 7);
+  }
+
   return restaurants.slice(0, duration);
 }
 
