@@ -10,6 +10,7 @@ const {
 const recommenderURL = process.env.RECOMMENDER_URL;
 
 router.post("/itineraries", async (req, res) => {
+  console.log("WELCOME TO THE CORE-SERVICE!!");
   try {
     const { title, destination, duration, budget, userPreferences } = req.body;
 
@@ -21,6 +22,8 @@ router.post("/itineraries", async (req, res) => {
       userPreferences: userPreferences,
       recommendedItineraryDescription: "",
     };
+
+    console.log("ItineraryToMake looks like this: ", itineraryToMake);
 
     // Get personalized and better results from Yelp
     const yelpData = prepareYelpData(itineraryToMake);
@@ -79,7 +82,7 @@ router.post("/itineraries", async (req, res) => {
       // Decide how to handle errors from the recommender-service.
     }
   } catch (error) {
-    res.status(500).send("Error creating itinerary");
+    res.status(500).send("CORE-SERVICE: Error creating itinerary");
   }
 });
 

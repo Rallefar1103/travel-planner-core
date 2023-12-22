@@ -7,7 +7,7 @@ const diningOptionsSchema = new mongoose.Schema({
 });
 
 const attractionOptionsSchema = new mongoose.Schema({
-  type: [String],
+  type: String,
   priceRange: String,
 });
 

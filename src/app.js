@@ -15,10 +15,10 @@ app.use("/api", itineraryRoutes);
 // Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send("Something went wrong!");
+  res.status(500).send("CORE-SERVICE: Something went wrong!");
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 app.listen(PORT, async () => {
   console.log(`Core service running on http://localhost:${PORT}`);
   //await mockIntegration();
