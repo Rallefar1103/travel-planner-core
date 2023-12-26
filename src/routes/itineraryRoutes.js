@@ -35,10 +35,7 @@ router.post("/itineraries", async (req, res) => {
     );
 
     // Process fetched Yelp Data
-    const listOfRestaurants = processYelpData(
-      yelpResults.data,
-      itineraryToMake.duration
-    );
+    const listOfRestaurants = processYelpData(yelpResults.data);
 
     const recommendationData = {
       title: itineraryToMake.title,
