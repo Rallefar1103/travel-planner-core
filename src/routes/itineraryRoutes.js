@@ -7,6 +7,8 @@ const {
   prepareYelpData,
 } = require("../helpers/yelpDataHelper");
 
+require("dotenv").config();
+
 const recommenderURL = process.env.RECOMMENDER_URL;
 
 router.post("/itineraries", async (req, res) => {
@@ -23,16 +25,21 @@ router.post("/itineraries", async (req, res) => {
       recommendedItineraryDescription: "",
     };
 
-    console.log("ItineraryToMake looks like this: ", itineraryToMake);
-
     // Get personalized and better results from Yelp
     const yelpData = prepareYelpData(itineraryToMake);
 
+    console.log(
+      "Calling the YELP API now on ",
+      process.env.EXTERNAL_APIS_URL_YELP
+    );
+
     // // Call the External-API service
     const yelpResults = await axios.post(
-      env.process.EXTERNAL_APIS_URL_YELP,
+      process.env.EXTERNAL_APIS_URL_YELP,
       yelpData
     );
+
+    console.log("Made it back from the Yelp service");
 
     // Process fetched Yelp Data
     const listOfRestaurants = processYelpData(yelpResults.data);
