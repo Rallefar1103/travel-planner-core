@@ -9,8 +9,6 @@ const {
 
 require("dotenv").config();
 
-const recommenderURL = process.env.RECOMMENDER_URL;
-
 router.post("/itineraries", async (req, res) => {
   console.log("WELCOME TO THE CORE-SERVICE!!");
   try {
@@ -42,7 +40,9 @@ router.post("/itineraries", async (req, res) => {
     console.log("Made it back from the Yelp service");
 
     // Process fetched Yelp Data
-    const listOfRestaurants = processYelpData(yelpResults.data);
+    const topRestaurant = processYelpData(yelpResults.data);
+
+    console.log("This is the top pick restaurant \n", topRestaurant);
 
     const recommendationData = {
       title: itineraryToMake.title,
@@ -50,41 +50,43 @@ router.post("/itineraries", async (req, res) => {
       duration: itineraryToMake.duration,
       budget: itineraryToMake.budget,
       attractions: itineraryToMake.userPreferences.attractions.type,
-      restaurants: listOfRestaurants,
+      restaurants: topRestaurant,
     };
 
     // Forward data to the ChatGPT recommender-service
-    try {
-      const recommenderResponse = await axios.post(
-        `${recommenderURL}/recommend`,
-        recommendationData
-      );
 
-      itineraryToMake.recommendedItineraryDescription =
-        recommenderResponse.data;
+    console.log(
+      "About to call the recommender service with this data \n",
+      recommendationData
+    );
 
-      const newItinerary = new Itinerary(itineraryToMake);
-      const savedItinerary = await newItinerary.save(); // save to mongoDB
+    const recommenderResponse = await axios.post(
+      process.env.RECOMMENDER_URL,
+      recommendationData
+    );
 
-      // Create the final response with recommended data added
-      const finalResponse = {
-        itinerary: {
-          id: savedItinerary._id,
-          destination: savedItinerary.destination,
-          duration: savedItinerary.duration,
-          budget: savedItinerary.budget,
-          userPreferences: savedItinerary.userPreferences,
-          recommendedItineraryDescription:
-            savedItinerary.recommendedItineraryDescription,
-        },
-      };
+    console.log("Made it back from recommender service");
 
-      // Send the recommended itinerary back to graphql-server
-      res.status(201).json(finalResponse);
-    } catch (error) {
-      console.error("Error calling the recommender-service: ", error);
-      // Decide how to handle errors from the recommender-service.
-    }
+    itineraryToMake.recommendedItineraryDescription = recommenderResponse.data;
+
+    const newItinerary = new Itinerary(itineraryToMake);
+    const savedItinerary = await newItinerary.save(); // save to mongoDB
+
+    // Create the final response with recommended data added
+    const finalResponse = {
+      itinerary: {
+        id: savedItinerary._id,
+        destination: savedItinerary.destination,
+        duration: savedItinerary.duration,
+        budget: savedItinerary.budget,
+        userPreferences: savedItinerary.userPreferences,
+        recommendedItineraryDescription:
+          savedItinerary.recommendedItineraryDescription,
+      },
+    };
+
+    // Send the recommended itinerary back to graphql-server
+    res.status(201).json(finalResponse);
   } catch (error) {
     res.status(500).send("CORE-SERVICE: Error creating itinerary");
   }
