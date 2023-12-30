@@ -1,9 +1,11 @@
 function prepareYelpData(itinerayData) {
   return {
     location: itinerayData.destination,
-    term: itinerayData.userPreferences.diningOptions.type, // e.g., 'restaurant', 'bar'
-    categories: itinerayData.userPreferences.diningOptions.cuisine, // e.g., 'italian' or 'japanese'
-    price: itinerayData.userPreferences.diningOptions.priceRange, // e.g., '1', '2', '3', '4'
+    term: itinerayData.userPreferences.diningOptions.type,
+    categories: itinerayData.userPreferences.diningOptions.cuisine,
+    price: _getPriceRange(
+      itinerayData.userPreferences.diningOptions.priceRange
+    ),
   };
 }
 
@@ -21,6 +23,22 @@ function processYelpData(yelpData) {
   restaurants.sort((a, b) => b.rating - a.rating);
 
   return restaurants[0];
+}
+
+function _getPriceRange(priceRange) {
+  if (priceRange === "$") {
+    return "1";
+  }
+
+  if (priceRange === "$$") {
+    return "2";
+  }
+
+  if (priceRange === "$$$") {
+    return "3";
+  }
+
+  return "4";
 }
 
 module.exports = {
