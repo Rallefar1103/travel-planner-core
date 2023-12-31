@@ -1,5 +1,5 @@
 const express = require("express");
-//require("./database"); // Initialize database
+require("./database"); // Initialize database
 require("dotenv").config();
 const mockYelpApiCall = require("../src/mocking/mockingExternalAPICall");
 const mockGPTCall = require("../src/mocking/mockingRecommenderAPICall");

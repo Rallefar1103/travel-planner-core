@@ -49,16 +49,9 @@ router.post("/itineraries", async (req, res) => {
       destination: itineraryToMake.destination,
       duration: itineraryToMake.duration,
       budget: itineraryToMake.budget,
-      attractions: itineraryToMake.userPreferences.attractions.type,
-      restaurants: topRestaurant,
+      attractions: itineraryToMake.userPreferences.attractionOptions.type,
+      restaurant: topRestaurant,
     };
-
-    // Forward data to the ChatGPT recommender-service
-
-    console.log(
-      "About to call the recommender service with this data \n",
-      recommendationData
-    );
 
     const recommenderResponse = await axios.post(
       process.env.RECOMMENDER_URL,
@@ -67,7 +60,8 @@ router.post("/itineraries", async (req, res) => {
 
     console.log("Made it back from recommender service");
 
-    itineraryToMake.recommendedItineraryDescription = recommenderResponse.data;
+    itineraryToMake.recommendedItineraryDescription =
+      recommenderResponse.data.recommendedItinerary;
 
     const newItinerary = new Itinerary(itineraryToMake);
     const savedItinerary = await newItinerary.save(); // save to mongoDB
@@ -88,6 +82,7 @@ router.post("/itineraries", async (req, res) => {
     // Send the recommended itinerary back to graphql-server
     res.status(201).json(finalResponse);
   } catch (error) {
+    console.error("CORE-SERVICE: Error creating itinerary: \n", error);
     res.status(500).send("CORE-SERVICE: Error creating itinerary");
   }
 });
