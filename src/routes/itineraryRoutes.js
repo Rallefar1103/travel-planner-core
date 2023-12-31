@@ -39,8 +39,13 @@ router.post("/itineraries", async (req, res) => {
 
     console.log("Made it back from the Yelp service");
 
+    let restaurantPricePreference = userPreferences.diningOptions.priceRange;
+
     // Process fetched Yelp Data
-    const topRestaurant = processYelpData(yelpResults.data);
+    const topRestaurant = processYelpData(
+      yelpResults.data,
+      restaurantPricePreference
+    );
 
     console.log("This is the top pick restaurant \n", topRestaurant);
 
@@ -68,15 +73,14 @@ router.post("/itineraries", async (req, res) => {
 
     // Create the final response with recommended data added
     const finalResponse = {
-      itinerary: {
-        id: savedItinerary._id,
-        destination: savedItinerary.destination,
-        duration: savedItinerary.duration,
-        budget: savedItinerary.budget,
-        userPreferences: savedItinerary.userPreferences,
-        recommendedItineraryDescription:
-          savedItinerary.recommendedItineraryDescription,
-      },
+      id: savedItinerary._id.toString(),
+      title: itineraryToMake.title,
+      destination: savedItinerary.destination,
+      duration: savedItinerary.duration,
+      budget: savedItinerary.budget,
+      userPreferences: itineraryToMake.userPreferences,
+      recommendedItineraryDescription:
+        itineraryToMake.recommendedItineraryDescription,
     };
 
     // Send the recommended itinerary back to graphql-server

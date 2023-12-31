@@ -9,7 +9,9 @@ function prepareYelpData(itinerayData) {
   };
 }
 
-function processYelpData(yelpData) {
+function processYelpData(yelpData, restaurantPricePreference) {
+  const priceLevels = { "$": 1, "$$": 2, "$$$": 3, "$$$$": 4 };
+
   const restaurants = yelpData.map((business) => ({
     name: business.name,
     rating: business.rating,
@@ -20,7 +22,13 @@ function processYelpData(yelpData) {
     location: business.location.address1,
   }));
 
-  restaurants.sort((a, b) => b.rating - a.rating);
+  const userPriceLevel = priceLevels[restaurantPricePreference];
+
+  restaurants.sort((a, b) => {
+    const aScore = a.rating - Math.abs(a.price - userPriceLevel);
+    const bScore = b.rating - Math.abs(b.price - userPriceLevel);
+    return bScore - aScore;
+  });
 
   return restaurants[0];
 }
