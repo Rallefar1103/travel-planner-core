@@ -24,6 +24,13 @@ app.listen(PORT, async () => {
   //await mockIntegration();
 });
 
+process.on("SIGTERM", () => {
+  console.log("SIGTERM signal received: closing HTTP server");
+  server.close(() => {
+    console.log("HTTP server closed");
+  });
+});
+
 async function mockIntegration() {
   const mockItineraryData = {
     title: "Copenhagen Itinerary 2024",
