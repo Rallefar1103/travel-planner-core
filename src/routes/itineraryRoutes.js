@@ -56,6 +56,7 @@ router.post("/itineraries", async (req, res) => {
       budget: itineraryToMake.budget,
       attractions: itineraryToMake.userPreferences.attractionOptions.type,
       restaurant: topRestaurant,
+      cuisine: itineraryToMake.userPreferences.diningOptions.cuisine,
     };
 
     const recommenderResponse = await axios.post(
