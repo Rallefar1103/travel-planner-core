@@ -83,6 +83,8 @@ router.post("/itineraries", async (req, res) => {
         itineraryToMake.recommendedItineraryDescription,
     };
 
+    console.log("Just about to route back to graphql");
+
     // Send the recommended itinerary back to graphql-server
     res.status(201).json(finalResponse);
   } catch (error) {
